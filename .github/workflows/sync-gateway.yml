@@ -7,10 +7,6 @@ on:
         description: Define which GitHub Environment to use
         required: true
         type: string
-      GATEWAY_URL:
-        description: URL for the Gateway Service Management API
-        required: true
-        type: string
     secrets:
       GATEWAY_RBAC:
         required: true
