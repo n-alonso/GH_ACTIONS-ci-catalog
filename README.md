@@ -4,7 +4,7 @@ Repository to store all GitHub Actions to be re-used by all other repositories.
 As such, they all trigger on `workflow_call` and thus need to be called with an `if` condition to control when they execute.
 
 **Notes:**
-- All workflows that require secrets need to include the necessary permissions to access them wqhen calling them:
+- All workflows that require secrets need to include the necessary permissions to access them when calling them:
 ```
     permissions:
       contents: read
@@ -25,6 +25,7 @@ Prefixes allowed: `feature|release|bugfix|hotfix|support`.
 Jira ticket: Has to be a valid Jira ticket number (Ie. STEP-1111).  
 **Notes:**  
 - **MUST be called on push**  
+
 Example usage:
 ```
   check_branch:
@@ -39,7 +40,8 @@ Pattern: `<type>[!]: <message>`.
 Types allowed: `feat|fix|docs|style|refactor|test|chore|build|ci|perf`.  
 **Notes:**  
 - **MUST be called on pull requests**  
-- **The use of parenthesis to define an optional scope is not supported**
+- **The use of parenthesis to define an optional scope is not supported**  
+
 Example usage:
 ```
   check_commits:
@@ -52,11 +54,14 @@ Example usage:
 Builds and pushes a Docker Image.  
 Inputs:  
 - environment   
+
 GitHub Environment Variables:
 - SERVICE_USER
-- DOCKER_REGISTRY_URL
+- DOCKER_REGISTRY_URL  
+
 GitHub Environment Secrets:  
-- SERVICE_PASSWORD 
+- SERVICE_PASSWORD  
+
 Example usage:
 ```
   build_dev:
@@ -75,13 +80,16 @@ Example usage:
 Deploys the application to OpenShift.  
 Inputs:  
 - environment   
+
 GitHub Environment Variables:
 - SERVICE_USER
 - OPENSHIFT_URL
 - OPENSHIFT_ROUTE
-- DOCKER_REGISTRY_URL
+- DOCKER_REGISTRY_URL  
+
 GitHub Environment Secrets:  
-- SERVICE_PASSWORD 
+- SERVICE_PASSWORD  
+
 Example usage:
 ```
   deploy_dev:
@@ -101,11 +109,14 @@ Example usage:
 Syncs the OpenAPI Specification file to SEB's Gateway. This will display it's contents in the Developer Portal.    
 Inputs:  
 - environment  
+
 GitHub Environment Variables:
-- GATEWAY_URL
+- GATEWAY_URL  
+
 GitHub Environment Secrets:  
 - GATEWAY_RBAC  
-- GATEWAY_API_KEY   
+- GATEWAY_API_KEY  
+
 Example usage:
 ```
   sync_gateway_staging:
