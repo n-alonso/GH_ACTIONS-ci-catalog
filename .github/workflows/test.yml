@@ -1,0 +1,13 @@
+name: Test Action
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: arc
+    steps:
+      - name: Test
+        run: |
+            echo "test"
+            
