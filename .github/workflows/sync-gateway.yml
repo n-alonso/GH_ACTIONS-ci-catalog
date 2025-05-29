@@ -2,23 +2,34 @@ name: Sync the OAS with the Developer Portal
 
 on:
   workflow_call:
-    # branches:
-    #   - main
-    # paths:
-    #   - 'openapi.yaml'
+    inputs:
+      environment:
+        description: Define which GitHub Environment to use
+        required: true
+        type: string
+      GATEWAY_URL:
+        description: URL for the Gateway Service Management API
+        required: true
+        type: string
+    secrets:
+      GATEWAY_RBAC:
+        required: true
+      GATEWAY_API_KEY:
+        required: true
 
 jobs:
   sync_gateway:
     name: Sync to Gateway
     runs-on: arc
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
-      - name: Sync Swagger File
+      - name: Sync OpenAPI Specification File
         run: |
             curl --request \
                 PUT ${{ vars.GATEWAY_URL }} \
                 --header "Content-Type: text/yaml" \
                 --header "X-Gateway-Rbac: ${{ secrets.GATEWAY_RBAC }}" \
                 --header "X-Api-Key: ${{ secrets.GATEWAY_API_KEY }}" \
-                --data-binary ${{ vars.OAS_PATH }} \
+                --data-binary "@./openapi.yaml" \
                 --show-error

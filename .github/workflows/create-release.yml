@@ -1,0 +1,31 @@
+name: Sync the OAS with the Developer Portal
+
+on:
+  workflow_call:
+
+jobs:
+    create-release:
+      runs-on: arc
+      permissions:
+        contents: write
+      steps:
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+        - name: Generate Release Notes
+          id: release_notes
+          run: |
+            RELEASE_NOTES=$(git log --oneline $(git describe --tags --abbrev=0 HEAD^)..${{ github.ref_name }})
+            echo "RELEASE_NOTES<<EOF" >> $GITHUB_OUTPUT
+            echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+        - name: Create Release
+          uses: actions/create-release@v1
+          env:
+            GITHUB_TOKEN: ${{ github.token }}
+          with:
+            tag_name: ${{ github.ref_name }}
+            release_name: Release ${{ github.ref_name }}
+            body: ${{ steps.release_notes.outputs.RELEASE_NOTES }}
+            draft: false
+      
