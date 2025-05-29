@@ -1,7 +1,7 @@
 name: Test Action
 
 on:
-  push:
+  workflow_call:
 
 jobs:
   test:
@@ -10,4 +10,3 @@ jobs:
       - name: Test
         run: |
             echo "test"
-            
