@@ -1,0 +1,48 @@
+name: Deploy to OpenShift
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: Define which GitHub Environment to use
+        required: true
+        type: string
+    secrets:
+      SERVICE_PASSWORD:
+        required: true
+
+jobs:
+    deploy:
+      runs-on: arc
+      environment: ${{ inputs.environment }}
+      container:
+          image: registry-redhat-io.repo7.sebank.se/openshift4/ose-cli:latest
+          options: --user root
+      steps:
+          - uses: actions/checkout@v4
+          - name: Login to OpenShift  
+            run: |
+              oc login \
+              -u=${{ vars.SERVICE_USER }} \
+              -p=${{ secrets.SERVICE_PASSWORD}} \
+              -s=${{ vars.OPENSHIFT_URL }} \
+              -n=step-api \
+              --insecure-skip-tls-verify
+          - name: Apply Config Files
+            run: |
+              oc apply -f configs/pvc.yaml
+              oc apply -f configs/service.yaml
+              oc apply -f configs/deployment.yaml
+              oc apply -f configs/cronjob.yaml
+              oc apply -f ${{ vars.OPENSHIFT_ROUTE }}
+          - name: Set Image
+            run: |
+              oc set image deployment/api \
+                api-container=${{ vars.DOCKER_REGISTRY_URL }}/${{ vars.SERVICE_USER }}/step-api:latest
+              oc patch cronjob step-api-file-updater \
+                -p '{"spec":{"jobTemplate":{"spec":{"template":{"spec":{"containers":[{"name":"file-updater","image":"${{ vars.DOCKER_REGISTRY_URL }}/${{ vars.SERVICE_USER }}/step-api:latest"}]}}}}}}'
+          - name: Restart Pods
+            run: |
+              oc rollout restart deployment/api
+              sleep 10
+              oc rollout status deployment/api

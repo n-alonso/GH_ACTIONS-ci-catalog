@@ -1,0 +1,24 @@
+name: Sync the OAS with the Developer Portal
+
+on:
+  workflow_call:
+    # branches:
+    #   - main
+    # paths:
+    #   - 'openapi.yaml'
+
+jobs:
+  sync_gateway:
+    name: Sync to Gateway
+    runs-on: arc
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sync Swagger File
+        run: |
+            curl --request \
+                PUT ${{ vars.GATEWAY_URL }} \
+                --header "Content-Type: text/yaml" \
+                --header "X-Gateway-Rbac: ${{ secrets.GATEWAY_RBAC }}" \
+                --header "X-Api-Key: ${{ secrets.GATEWAY_API_KEY }}" \
+                --data-binary ${{ vars.OAS_PATH }} \
+                --show-error

@@ -1,0 +1,27 @@
+name: Check Branch
+
+on:
+  workflow_call:
+
+jobs:
+  check-branch-name:
+    runs-on: arc
+    steps:
+      - name: check branch name
+        run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          GITFLOW_PATTERN="^(develop|main|(feature|release|bugfix|hotfix|support)\/(STEP-[0-9]{4}-.+))$"
+
+          echo "Checking branch name: ${BRANCH_NAME}"
+
+          if [[ ! $BRANCH_NAME =~ $GITFLOW_PATTERN ]]; then
+            echo "ERROR: Branch naming is not compliant!"
+            echo "Branch names must follow: <prefix>/<ticket>-<message>"
+            echo "Prefixes allowed: feature|release|bugfix|hotfix|support"
+            echo ""
+            echo "Your branch name: $BRANCH_NAME"
+            exit 1
+          else
+            echo "Branch is compliant"
+            exit 0
+          fi
