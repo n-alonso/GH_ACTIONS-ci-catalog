@@ -3,7 +3,13 @@
 Repository to store all GitHub Actions to be re-used by all other repositories.  
 As such, they all trigger on `workflow_call` and thus need to be called with an `if` condition to control when they execute.
 
+You can read more about re-usable workflows in [GitHub's Documentation](https://docs.github.com/en/actions/sharing-automations/reusing-workflows).
+
 **Notes:**
+- External workflows must be called using the keyword `uses` with the following syntax `<owner>/<repository>/<path_to_file>@<ref>`, where `ref` can be a commit SHA, a release tag or a branch name. Example usage:
+```
+    uses: step-crew/ci-catalog/.github/workflows/branch-names.yml@v1.0.0
+```
 - All workflows that require secrets need to include the necessary permissions to access them when calling them:
 ```
     permissions:
