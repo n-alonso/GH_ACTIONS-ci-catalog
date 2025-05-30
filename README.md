@@ -130,3 +130,17 @@ Example usage:
       GATEWAY_RBAC: ${{ secrets.GATEWAY_RBAC }}
       GATEWAY_API_KEY: ${{ secrets.GATEWAY_API_KEY }}
 ```
+
+### Create Release
+
+It creates a release by catching a new tag being pushed and creating a differential of the commits between this and the previous tag found in the commit history.
+**Notes:**
+- **It MUST be called on a `push` for a `git tag`**
+- **The repository MUST contain at least 2 tags (including the current one being pushed)**
+
+Example usage:
+```
+  create_release:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    uses: step-crew/ci-catalog/.github/workflows/create-release.yml@main
+```
