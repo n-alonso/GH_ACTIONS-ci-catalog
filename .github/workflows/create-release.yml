@@ -15,7 +15,7 @@ jobs:
         - name: Generate Release Notes
           id: release_notes
           run: |
-            RELEASE_NOTES=$(git log --oneline $(git describe --tags --abbrev=0 HEAD^)..${{ github.ref_name }})
+            RELEASE_NOTES=$(git log --oneline --no-merges $(git describe --tags --abbrev=0 HEAD^)..${{ github.ref_name }})
             echo "RELEASE_NOTES<<EOF" >> $GITHUB_OUTPUT
             echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
