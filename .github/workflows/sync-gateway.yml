@@ -28,4 +28,5 @@ jobs:
                 --header "X-Gateway-Rbac: ${{ secrets.GATEWAY_RBAC }}" \
                 --header "X-Api-Key: ${{ secrets.GATEWAY_API_KEY }}" \
                 --data-binary "@./openapi.yaml" \
-                --show-error
+                --show-error \
+                --fail
