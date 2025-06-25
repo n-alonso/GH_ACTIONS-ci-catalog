@@ -6,6 +6,7 @@ on:
 jobs:
   check-branch-name:
     runs-on: arc
+    if: github.ref_type == 'branch'
     steps:
       - name: check branch name
         run: |
