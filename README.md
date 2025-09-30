@@ -48,7 +48,6 @@ Pattern: `<type>[!]: <message>`.
 Types allowed: `feat|fix|docs|style|refactor|test|chore|build|ci|perf`.  
 **Notes:**  
 - **Should be called on pull requests**  
-- **The use of parenthesis to define an optional scope is not supported**  
 
 Example usage:
 ```
