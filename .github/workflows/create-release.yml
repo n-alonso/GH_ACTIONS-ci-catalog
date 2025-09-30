@@ -1,4 +1,4 @@
-name: Sync the OAS with the Developer Portal
+name: Create Release
 
 on:
   workflow_call:
